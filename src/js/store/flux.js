@@ -1,4 +1,4 @@
-const getState = ({ getStore, setStore }) => {
+const getState = ({ getStore, setStore, getActions }) => {
 	return {
 		store: {
 			contactList: [],
@@ -16,17 +16,22 @@ const getState = ({ getStore, setStore }) => {
 					console.log(err);
 				}
 			},
-			addContact: user => {
-				fetch("https://assets.breatheco.de/apis/fake/contact/", {
-					method: "POST", // or 'POST'
-					body: JSON.stringify(user), // data can be `string` or {object}!
+			addContact: (contact, title, id) => {
+				console.log(contact, "En flux");
+
+				fetch("https://assets.breatheco.de/apis/fake/contact/" + id, {
+					method: title == "Update contact" ? "PUT" : "POST", // or ‘POST’
+					body: JSON.stringify(contact),
 					headers: {
 						"Content-Type": "application/json"
 					}
 				})
-					.then(res => res.json())
-					.then(response => console.log("Success:", JSON.stringify(response)))
-					.catch(error => console.error("Error:", error));
+					.then(respose => {
+						if (respose.ok) {
+							getActions().loadAgenda();
+						}
+					})
+					.catch(err => console.log(err));
 			},
 
 			deleteContact: async id => {

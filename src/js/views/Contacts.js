@@ -20,7 +20,14 @@ export const Contacts = () => {
 		<div className="container">
 			<div>
 				<p className="text-right my-3">
-					<Link className="btn btn-success" to="/add">
+					<Link
+						to={{
+							pathname: "/add",
+							state: {
+								title: "Add new contact"
+							}
+						}}
+						className="btn btn-success">
 						Add new contact
 					</Link>
 				</p>
